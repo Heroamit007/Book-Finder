@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./index.css";
 import BookTable from "./components/BookTable";
+import Pagination from "./components/Pagination";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -11,23 +12,25 @@ function App() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const booksPerPage = 20; // show 20 books per page
+
   const inputRef = useRef(null);
   const suggestionRef = useRef(null);
 
-  // Fetch initial books
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  // Fetch books
-
-  const fetchBooks = async (query = "book") => {
+  // Fetch books from API
+  const fetchBooks = async (query = "book", page = 1) => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `https://openlibrary.org/search.json?title=${query}`
+        `https://openlibrary.org/search.json?title=${query}&page=${page}`
       );
       setBooks(res.data.docs || []);
+
+      // Calculate total pages based on API results
+      const totalResults = res.data.numFound || 0;
+      setTotalPages(Math.ceil(totalResults / booksPerPage));
     } catch (err) {
       console.error("Error fetching books:", err);
     } finally {
@@ -72,10 +75,21 @@ function App() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Initial fetch
+  useEffect(() => {
+    fetchBooks("book", 1);
+  }, []);
+
+  // Fetch books when page changes
+  useEffect(() => {
+    fetchBooks(search || "book", currentPage);
+  }, [currentPage]);
+
   // Handlers
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchBooks(search);
+    setCurrentPage(1);
+    fetchBooks(search || "book", 1);
     setShowSuggestions(false);
   };
 
@@ -88,7 +102,8 @@ function App() {
 
   const handleSuggestionClick = (title) => {
     setSearch(title);
-    fetchBooks(title);
+    setCurrentPage(1);
+    fetchBooks(title, 1);
     setShowSuggestions(false);
   };
 
@@ -133,8 +148,7 @@ function App() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Search for books..."
-            className="p-3 w-full rounded-xl border border-gray-300 shadow-md 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="p-3 w-full rounded-xl border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
           {showSuggestions && suggestions.length > 0 && (
             <ul className="absolute left-0 right-0 bg-white border border-gray-200 shadow-lg rounded-lg mt-1 z-20 max-h-60 overflow-y-auto">
@@ -158,8 +172,7 @@ function App() {
 
         <button
           type="submit"
-          className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-xl shadow-md 
-                     hover:from-red-600 hover:to-pink-600 transition font-semibold"
+          className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-xl shadow-md hover:from-red-600 hover:to-pink-600 transition font-semibold"
         >
           Search
         </button>
@@ -167,7 +180,12 @@ function App() {
 
       {/* Book Results */}
       <div className="max-w-6xl mx-auto">
-        <BookTable docs={books} loading={loading} />
+        <BookTable docs={books.slice(0, booksPerPage)} loading={loading} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );
