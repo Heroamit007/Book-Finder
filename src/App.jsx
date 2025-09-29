@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./index.css";
 import BookTable from "./components/BookTable";
-import Pagination from "./components/Pagination";
+import Pagination from "./components/Paginations";
 
 function App() {
   const [books, setBooks] = useState([]);
