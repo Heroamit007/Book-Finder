@@ -1,16 +1,45 @@
-# React + Vite
+# 📚 Book Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Book Finder is a simple React-based application that allows users to search for books and explore details using an external API.  
+It is styled with **Tailwind CSS** and built with **Vite** for a fast and modern development experience.  
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- 🔍 **Search Books**: Search books by title, author, or keyword.  
+- 📖 **Book Details**: View book information like title, author, and description.  
+- 📑 **Pagination**: Browse through multiple pages of results.  
+- 🎨 **Modern UI**: Built with React + Tailwind CSS for a clean and responsive design.  
+- ⚡ **Fast Build**: Powered by Vite for blazing-fast development and builds.  
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Frontend**: React (with Vite)  
+- **Styling**: Tailwind CSS  
+- **API Handling**: Axios  
+- **Build Tool**: Vite  
+
+---
+
+## 📂 Project Setup
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/Heroamit007/Book-Finder.git
+cd Book-Finder
+
+npm install  # this will download all the dependencies
+
+npm run dev # run this command on local terminal inside the project directory
+
+# To Run the project on codeSandBox  use the below link
+https://codesandbox.io/p/github/Heroamit007/Book-Finder/main?import=true
+
+
+
+# open terminal
+npm run build
+npm run dev
